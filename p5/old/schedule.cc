@@ -95,28 +95,29 @@ int removeProcess(int pid)
 				{
 					if (postionInQ->down)
 					{
-						if (postionInQ->prev)
+						if (postionInQ->up)
 						{
-							postionInQ->prev->down = postionInQ->down;
-							postionInQ->down->prev = postionInQ->prev;
+							postionInQ->up->down = postionInQ->down;
+							postionInQ->down->up = postionInQ->up;
 						}
 						else
 						{
 							cur->down = postionInQ->down;
-							cur->down->prev = NULL;
+							cur->down->up = NULL;
 						}
 					}
 					else
 					{
-						if (postionInQ->prev)
+						if (postionInQ->up)
 						{
-							postionInQ->prev->down = NULL;
+							postionInQ->up->down = NULL;
 						}
 						else
 						{
 							cur->down = NULL;
 						}
 					}
+					printf("WOWWWW\n");
 					free(postionInQ);
 					return 1;
 				}
@@ -140,34 +141,63 @@ int removeProcess(int pid)
 int nextProcess(int &t)  //changed to t because sublime's syntax hilighting bothers me
 {
 	cur = root;
-	if(cur)
+	for(int i=0; i<4; i++)
 	{
-		// while(cur->next)
-		// {
-		// 	if (cur->down)
-		// 	{
-				printf("%d \n", cur->priority);
-				struct node* temp = postionInQ = cur->down;
-				cur->down = cur->down->down;
-				cur->down->up = NULL;
-				while (postionInQ->down)
-					postionInQ = postionInQ->down;
+		if (cur->down)
+		{
+			printf("%d \n", cur->priority);
+			struct node* temp = postionInQ = cur->down;
+			cur->down = cur->down->down;
+			cur->down->up = NULL;
+			while (postionInQ->down)
+				postionInQ = postionInQ->down;
 
-				postionInQ->down = temp;
-				temp->down = NULL;
-				temp->up = postionInQ;
-				t = temp->priority;
-				// printf("%d \n",temp->value);
-				return temp->value;
-				// break;
-		// 	}
-		// 	else
-		// 		cur = cur->next; //return -1;
-
-		// }
+			postionInQ->down = temp;
+			temp->down = NULL;
+			temp->up = postionInQ;
+			t = temp->priority;
+			// printf("%d \n",temp->value);
+			return temp->value;
+			// printf("kk");
+		}
+		else
+		{
+			cur = cur->next;
+		}
 	}
-	else
-		return -1;
+	return -1;
+	// while(cur)
+	// {
+	// 	if (cur->down)
+	// 	{
+	// 		// printf("%d \n", cur->priority);
+	// 		struct node* temp = postionInQ = cur->down;
+	// 		cur->down = cur->down->down;
+	// 		cur->down->up = NULL;
+	// 		while (postionInQ->down)
+	// 			postionInQ = postionInQ->down;
+
+	// 		postionInQ->down = temp;
+	// 		temp->down = NULL;
+	// 		temp->up = postionInQ;
+	// 		t = temp->priority;
+	// 		printf("%d \n",temp->value);
+	// 		return temp->value;
+	// 		printf("kk");
+	// 	}
+	// 	else
+	// 	{
+	// 		if(cur->next)
+	// 			cur = cur->next;
+	// 		else
+	// 			return -1;
+	// 		//cur = cur->next; //return -1;
+	// 	}
+	// 	printf("here");
+
+	// }
+
+	//return -1;
 }
 
 /*
@@ -182,11 +212,21 @@ int hasProcess()
 	for(int i=0; i<4; i++)
 	{
 		if(cur->down == NULL)
-			return 0;
-		else
 			cur = cur->next;
+		else
+			return 1;
 	}
-	return 1;
+	return 0;
+	// cur = root;
+	// for(int i=0; i<4; i++)
+	// {
+	// 	if(cur->down == NULL)
+	// 		return 0;
+	// 	else
+	// 		cur = cur->next;
+	// }
+	// return 1;
+	//============================
 	// if(root == NULL)
 	// 	return 0;
 	// else
