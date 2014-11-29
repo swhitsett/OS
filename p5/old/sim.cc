@@ -42,9 +42,9 @@ int main(int argc, char **argv){
     int time = 0;
     while(hasProcess()){
         process = nextProcess(time);
-        //printf("hilojoe %d", process);
+        // printf("hilojoe %d", process);
         for(;time>0;time--){
-            // printf("%d",time);
+            printf("%d",time);
             printf("Process %d executed\n", process);
             processes[process]--;
             if(processes[process]<0){

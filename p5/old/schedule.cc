@@ -1,5 +1,6 @@
 #include "schedule.h"
 #include <stdlib.h>
+#include <stdio.h>   //for debuging only incase i forget to remove
 
 struct node* root;
 struct node* postionInQ;
@@ -26,12 +27,14 @@ void init()
       {
 	   	  root = (struct node*)malloc(sizeof(struct node));
 	   	  root->priority = 1;
+	   	  root->down = NULL;
 	      cur = root;
 	  }
 	  else
 	  {
 	  	 cur->next = (struct node*)malloc(sizeof(struct node));
 	   	 cur->next->priority = i+1;
+	   	 cur->down = NULL;
 	     cur = cur->next;
 	  }
 
@@ -49,7 +52,7 @@ void init()
 int addProcess(int pid, int priority)
 {
 	cur = root;
-	while(cur->priority != priority && cur->next != NULL)
+	while(cur->priority != priority && cur != NULL)
 		cur = cur->next;
 
 	if(!cur->down)
@@ -79,47 +82,53 @@ int addProcess(int pid, int priority)
  */
 int removeProcess(int pid)
 {
-	if (root)
+	cur = root;
+	for(int i=0; i<4; i++)
 	{
-		cur = root;
-		do
+
+		if (cur->down)
 		{
-			if (cur->value == pid)
+			postionInQ = cur->down;
+			do
 			{
-				if (cur->next)
+				if (postionInQ->value == pid)
 				{
-					if (cur->prev)
+					if (postionInQ->down)
 					{
-						cur->prev->next = cur->next;
-						cur->next->prev = cur->prev;
+						if (postionInQ->prev)
+						{
+							postionInQ->prev->down = postionInQ->down;
+							postionInQ->down->prev = postionInQ->prev;
+						}
+						else
+						{
+							cur->down = postionInQ->down;
+							cur->down->prev = NULL;
+						}
 					}
 					else
 					{
-						root = cur->next;
-						root->prev = NULL;
+						if (postionInQ->prev)
+						{
+							postionInQ->prev->down = NULL;
+						}
+						else
+						{
+							cur->down = NULL;
+						}
 					}
+					free(postionInQ);
+					return 1;
 				}
 				else
 				{
-					if (cur->prev)
-					{
-						cur->prev->next = NULL;
-					}
-					else
-					{
-						root = NULL;
-					}
+					postionInQ = postionInQ->down;
 				}
-				free(cur);
-				return 1;
-			}
-			else
-			{
-				cur = cur->next;
-			}
-		} while (cur);
+			} while (postionInQ);
+		}
+		cur = cur->next;// return 0;	
 	}
-	return 0;	
+	return 0;
 }
 /*
  * Function to get the next process from the scheduler
@@ -133,10 +142,11 @@ int nextProcess(int &t)  //changed to t because sublime's syntax hilighting both
 	cur = root;
 	if(cur)
 	{
-		while(cur->next)
-		{
-			if (cur->down)
-			{
+		// while(cur->next)
+		// {
+		// 	if (cur->down)
+		// 	{
+				printf("%d \n", cur->priority);
 				struct node* temp = postionInQ = cur->down;
 				cur->down = cur->down->down;
 				cur->down->up = NULL;
@@ -147,11 +157,14 @@ int nextProcess(int &t)  //changed to t because sublime's syntax hilighting both
 				temp->down = NULL;
 				temp->up = postionInQ;
 				t = temp->priority;
+				// printf("%d \n",temp->value);
 				return temp->value;
-			}
-			else
-				return -1;
-		}
+				// break;
+		// 	}
+		// 	else
+		// 		cur = cur->next; //return -1;
+
+		// }
 	}
 	else
 		return -1;
