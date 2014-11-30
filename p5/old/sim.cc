@@ -37,14 +37,17 @@ int main(int argc, char **argv){
         printf("Scheduled Process: %d, Priority:%d\n", i, priority);
         addProcess(i,priority);
     }  
-    
+    int asdf;
     int process = 0;
     int time = 0;
     while(hasProcess()){
         process = nextProcess(time);
-        // printf("hilojoe %d", process);
+        //  printf("%d ", process);
+        //  if(asdf == 20)
+        //     break;
+        // asdf++;
         for(;time>0;time--){
-            printf("%d",time);
+            // printf("%d",time);
             printf("Process %d executed\n", process);
             processes[process]--;
             if(processes[process]<0){
