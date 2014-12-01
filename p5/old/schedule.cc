@@ -1,4 +1,8 @@
-//creates 77% of the output before the odd segfualt breaks it
+//Sam Whitsett
+//005265222
+//project 5
+//
+//creates 77% of the output correctly before the odd segfualt breaks it in removeProcess
 #include "schedule.h"
 #include <stdlib.h>
 #include <stdio.h>   //for debuging only incase i forget to remove
@@ -141,21 +145,18 @@ int nextProcess(int &t)  //changed to t because sublime's syntax hilighting both
 		else 
 			break;
 	}
-	// printf("here 1");
 	if (cur->down)
 	{
-		// printf("here 2");
 		struct node* temp = postionInQ = cur->down;
 		cur->down = cur->down->down;
 		cur->down->up = NULL;
-		// printf("here 3");
 		while (postionInQ->down)
 			postionInQ = postionInQ->down;
 
 		postionInQ->down = temp;
 		temp->down = NULL;
 		temp->up = postionInQ;
-		// printf("here 4");
+
 		if(cur->priority == 1)
 			t = 4;
 		else if(cur->priority == 2)
@@ -164,7 +165,7 @@ int nextProcess(int &t)  //changed to t because sublime's syntax hilighting both
 			t = 2;
 		else if(cur->priority == 4)
 			t = 1;
-		// printf("here 5");
+
 		if(currentQ == 1)
 			currentQ = 2;
 		else if(currentQ == 2)
@@ -173,42 +174,12 @@ int nextProcess(int &t)  //changed to t because sublime's syntax hilighting both
 			currentQ = 4;
 		else if(currentQ == 4)
 			currentQ = 1;
-		// printf("here 6");
 		return temp->value;
 	}
 	else
 	{
 		return -1;//cur = cur->next;
 	}
-
-	// cur = root;
-	// for(int i=0; i<4; i++)
-	// {
-	// 	if(cur->priority == currentQ)
-	// 	{
-	// 		if (cur->down)
-	// 		{
-	// 			struct node* temp = postionInQ = cur->down;
-	// 			cur->down = cur->down->down;
-	// 			cur->down->up = NULL;
-	// 			while (postionInQ->down)
-	// 				postionInQ = postionInQ->down;
-
-	// 			postionInQ->down = temp;
-	// 			temp->down = NULL;
-	// 			temp->up = postionInQ;
-	// 			t = temp->priority;
-	// 			return temp->value;
-	// 		}
-	// 		else
-	// 		{
-	// 			cur = cur->next;
-	// 		}
-	// 	}
-	// }
-	// return -1;
-
-	//return -1;
 }
 
 /*
@@ -228,18 +199,5 @@ int hasProcess()
 			return 1;
 	}
 	return 0;
-	// cur = root;
-	// for(int i=0; i<4; i++)
-	// {
-	// 	if(cur->down == NULL)
-	// 		return 0;
-	// 	else
-	// 		cur = cur->next;
-	// }
-	// return 1;
-	//============================
-	// if(root == NULL)
-	// 	return 0;
-	// else
-	// 	return 1;
+
 }
